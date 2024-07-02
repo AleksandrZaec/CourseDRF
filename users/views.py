@@ -1,5 +1,7 @@
 from rest_framework.generics import CreateAPIView, UpdateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, \
     RetrieveUpdateAPIView
+
+from users.permissions import IsModeratorOrOwner
 from users.serializers import UserSerializer
 from users.models import User
 from rest_framework import permissions, status
@@ -12,8 +14,7 @@ class UserCreateAPIView(CreateAPIView):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    # permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def perform_create(self, serializer):
         user = serializer.save()
@@ -27,7 +28,7 @@ class UserUpdateAPIView(UpdateAPIView):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
+    permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
 
 
 class UserDestroyAPIView(DestroyAPIView):
@@ -36,7 +37,7 @@ class UserDestroyAPIView(DestroyAPIView):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
+    permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
 
 
 class UserListAPIView(ListAPIView):
@@ -45,7 +46,7 @@ class UserListAPIView(ListAPIView):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
@@ -54,7 +55,7 @@ class UserRetrieveAPIView(RetrieveAPIView):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
+    permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
 
 
 class UserProfileUpdateAPIView(RetrieveUpdateAPIView):
@@ -62,8 +63,7 @@ class UserProfileUpdateAPIView(RetrieveUpdateAPIView):
     Обновление профиля пользователя.
     """
     serializer_class = UserSerializer
-
-    # permission_classes = [permissions.IsAuthenticated]  # Требуется аутентификация
+    permission_classes = [permissions.IsAuthenticated]  # Требуется аутентификация
 
     def get_object(self):
         return self.request.user
@@ -72,3 +72,5 @@ class UserProfileUpdateAPIView(RetrieveUpdateAPIView):
         if self.get_object() != self.request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
+
+
