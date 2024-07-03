@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from users.models import User
+from users.validators import validate_unique_email
 
 
 class UserSerializer(ModelSerializer):
@@ -9,7 +10,8 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'phone', 'city', 'avatar', 'telegram_id', 'telegram_nik']
+        fields = ['first_name', 'last_name', 'email', 'phone', 'city', 'avatar', 'telegram_id', 'telegram_nik', 'password', 'id']
+        validators = [validate_unique_email]
 
     def create(self, validated_data):
         password = validated_data.pop('password')

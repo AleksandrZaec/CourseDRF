@@ -1,7 +1,8 @@
-from rest_framework.generics import CreateAPIView, UpdateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, \
+from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, \
     RetrieveUpdateAPIView
 
-from users.permissions import IsModeratorOrOwner
+from users.pagination import UserPagination
+from users.permissions import IsModeratorOrOwner, IsModeratorOrSuperuser, IsOwner
 from users.serializers import UserSerializer
 from users.models import User
 from rest_framework import permissions, status
@@ -10,7 +11,7 @@ from rest_framework.response import Response
 
 class UserCreateAPIView(CreateAPIView):
     """
-    Класс создания пользователя
+    Эндпоинт для создания пользователя
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -22,48 +23,40 @@ class UserCreateAPIView(CreateAPIView):
         user.save()
 
 
-class UserUpdateAPIView(UpdateAPIView):
-    """
-    Класс редактирования пользователя. Админом.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
-
-
 class UserDestroyAPIView(DestroyAPIView):
     """
-    Класс для удаления пользователя
+    Эндпоинт для удаления пользователя
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
+    permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner, IsModeratorOrSuperuser]
 
 
 class UserListAPIView(ListAPIView):
     """
-    Класс для просмотра списка пользователей
+    Эндпоинт для просмотра списка пользователей
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = UserPagination
+    permission_classes = [permissions.IsAuthenticated, IsModeratorOrSuperuser]
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
     """
-    Класс для просмотра одного пользователя
+    Эндпоинт для просмотра одного пользователя
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner]
+    permission_classes = [permissions.IsAuthenticated, IsModeratorOrOwner, IsModeratorOrSuperuser]
 
 
 class UserProfileUpdateAPIView(RetrieveUpdateAPIView):
     """
-    Обновление профиля пользователя.
+    Эндпоинт для обновления профиля пользователя.
     """
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Требуется аутентификация
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def get_object(self):
         return self.request.user
@@ -72,5 +65,3 @@ class UserProfileUpdateAPIView(RetrieveUpdateAPIView):
         if self.get_object() != self.request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
-
-
