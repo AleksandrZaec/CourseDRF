@@ -6,7 +6,9 @@ TOKEN = settings.TOKEN_BOT
 
 
 def send_message(text, chat_id):
-    """Отправляет сообщение через Telegram бот"""
+    """
+    Отправляет сообщение через Telegram бот
+    """
     url = f'{URL}{TOKEN}/sendMessage'
     payload = {
         'chat_id': chat_id,

@@ -12,7 +12,9 @@ URL = settings.TELEGRAM_URL
 
 @shared_task
 def send_tg_message():
-    """Отправка сообщения в телеграм"""
+    """
+    Отправка сообщения в телеграм
+    """
     time_now = datetime.now().time()
     start_time = (datetime.combine(datetime.today(), time_now) - timedelta(minutes=10)).time()
     finish_time = (datetime.combine(datetime.today(), time_now) + timedelta(minutes=10)).time()
@@ -42,7 +44,9 @@ def send_tg_message():
 
 
 def get_updates():
-    """Получает обновления от Telegram"""
+    """
+    Получает обновления от Telegram
+    """
     response = requests.get(f'{URL}{TOKEN}/getUpdates')
     return response.json()
 

@@ -12,3 +12,4 @@ gevent==24.2.1
 requests==2.32.3
 python-telegram-bot==21.3
 pytz==2024.1
+drf-yasg==1.21.7
