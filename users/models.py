@@ -12,7 +12,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, verbose_name='Телефон', **NULLABLE)
     city = models.CharField(max_length=50, verbose_name='город', **NULLABLE)
     avatar = models.ImageField(upload_to='users/', verbose_name='Аватар', **NULLABLE)
-    telegram_id = models.CharField(max_length=50, verbose_name="Телеграмм чат айди", **NULLABLE)
+    telegram_id = models.CharField(max_length=50, verbose_name='Телеграмм чат айди')
     telegram_nik = models.CharField(max_length=50, verbose_name='Телеграм ник')
     ver_code = models.CharField(max_length=4, verbose_name="Код верификации",help_text="Код верификации", **NULLABLE)
     is_active = models.BooleanField(default=True)
