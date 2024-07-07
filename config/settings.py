@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -82,16 +83,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('BD_USER'),
-#         'PASSWORD': os.getenv('BD_PASSWORD'),
-#         'HOST': os.getenv('HOST'),
-#         'PORT': os.getenv('PORT'),
-#     }
-# }
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
@@ -175,6 +166,13 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    'send-tg-message-every-10-minutes': {
+        'task': 'habits.tasks.send_tg_message',
+        'schedule': timedelta(minutes=10),  # запуск каждые 10 минут
+    },
+}
 
 TOKEN_BOT = os.getenv('TOKEN_BOT')
 TELEGRAM_URL = os.getenv('TELEGRAM_URL')
