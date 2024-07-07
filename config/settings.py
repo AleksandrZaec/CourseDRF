@@ -90,7 +90,7 @@ DATABASES = {
        'USER': os.getenv('BD_USER'),
        'PASSWORD': os.getenv('BD_PASSWORD'),
        'HOST': os.getenv('HOST'),
-       'PORT':  os.getenv('PORT'),
+       'PORT': os.getenv('PORT'),
    }
 }
 # Password validation
