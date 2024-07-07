@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'courseworkdrf',
-       'USER': 'postgres',
-       'PASSWORD': 'Postgres',
-       'HOST': 'localhost',
-       'PORT': '5432',
+       'NAME': os.getenv('DB_NAME'),
+       'USER': os.getenv('BD_USER'),
+       'PASSWORD': os.getenv('BD_PASSWORD'),
+       'HOST': os.getenv('HOST'),
+       'PORT':  os.getenv('PORT'),
    }
 }
 # Password validation
