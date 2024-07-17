@@ -18,7 +18,8 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(BASE_DIR / '.env')
+dot_env = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path=dot_env)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_celery_beat',
     'drf_yasg',
+
     'users',
     'habits'
 ]
@@ -86,11 +88,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': os.getenv('DB_NAME'),
-       'USER': os.getenv('BD_USER'),
-       'PASSWORD': os.getenv('BD_PASSWORD'),
-       'HOST': os.getenv('HOST'),
-       'PORT': os.getenv('PORT'),
+       'NAME': os.getenv('POSTGRES_DB_NAME'),
+       'USER': os.getenv('POSTGRES_BD_USER'),
+       'PASSWORD': os.getenv('POSTGRES_BD_PASSWORD'),
+       'HOST': os.getenv('POSTGRES_HOST'),
+       'PORT': os.getenv('POSTGRES_PORT'),
    }
 }
 # Password validation
@@ -142,22 +144,27 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication'],
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+}
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(weeks=4),
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "https://read-only.example.com",
-    "https://read-and-write.example.com",
+    'http://localhost:8000',
+    'http://127.0.0.1:8000'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://read-and-write.example.com",
+    'http://localhost:8000',
+    'http://127.0.0.1:8000'
 ]
+
+CORS_ALLOW_ALL_ORIGINS = False
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
